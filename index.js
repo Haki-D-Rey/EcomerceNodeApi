@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 //ROUTER CONFIGURATION
 const useRoute = require("./route/user");
@@ -22,6 +23,7 @@ app.listen(process.env.PORT, () => {
 });
 
 app.use(express.json());
+app.use(cors());
 
 app.get("/api/", () => {
   console.log("Api corriendo...");
