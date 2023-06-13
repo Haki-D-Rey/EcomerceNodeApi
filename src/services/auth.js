@@ -1,10 +1,41 @@
-const router = require("express").Router();
-const User = require("../models/User");
 const Crypto = require("crypto-js");
+const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 
-//REGISTER
-router.post("/register", async (req, res) => {
+const getLoginUserService = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(401).json("Credenciales Incorrectas");
+    }
+
+    const hasPassword = Crypto.AES.decrypt(
+      user.password,
+      process.env.PASSPHRASE
+    ).toString(Crypto.enc.Utf8);
+
+    if (hasPassword !== password) {
+      return res.status(401).json("Credenciales Incorrectas");
+    }
+
+    const token = jwt.sign(
+      {
+        id: user._id,
+        isAdmin: user.isAdmin,
+      },
+      process.env.JWT_SCRE,
+      {
+        expiresIn: "3d",
+      }
+    );
+    return res.status(200).json({ ...user._doc, token });
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+};
+
+const postRegisterUser = async (req, res) => {
   const { username, email, password } = req.body;
 
   const existingUsername = await User.findOne({ username });
@@ -30,46 +61,14 @@ router.post("/register", async (req, res) => {
 
   try {
     const savedUser = await newUser.save();
-    res
+    return res
       .status(201)
       .json({ user: savedUser, message: "Usuario registrado exitosamente" });
   } catch (error) {
-    res
+    return res
       .status(500)
       .json({ error: "Ha ocurrido un error al registrar el usuario" });
   }
-});
+};
 
-//LOGIN
-router.get("/login", async (req, res) => {
-  try {
-    const { username } = req.body;
-    const user = await User.findOne({ username });
-    !user && res.status(401).json("Credenciales Incorrectas");
-
-    const hasPassword = Crypto.AES.decrypt(
-      user.password,
-      process.env.PASSPHRASE
-    ).toString(Crypto.enc.Utf8);
-
-    hasPassword !== req.body.password &&
-      res.status(401).json("Credenciales Incorrect");
-
-    const token = jwt.sign(
-      {
-        id: user._id,
-        isAdmin: user.isAdmin,
-      },
-      process.env.JWT_SCRE,
-      {
-        expiresIn: "3d",
-      }
-    );
-
-    res.status(200).json({ ...user._doc, token });
-  } catch (error) {
-    res.status(500).json(error);
-  }
-});
-
-module.exports = router;
+module.exports = { getLoginUserService, postRegisterUser };
