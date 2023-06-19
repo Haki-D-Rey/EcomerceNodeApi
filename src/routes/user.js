@@ -1,12 +1,30 @@
 const router = require("express").Router();
+const {
+  verifyTokenAutorizationAdminUser,
+  verifyToken,
+} = require("../helper/middleware/verifyToken");
 
-router.get("/usertest", (req, res) => {
-  res.send("user test sucessfull");
-});
+const {
+  getUserAllController,
+  getUserIdController,
+  postUserController,
+  putUserController,
+  deleteUserController,
+} = require("../controllers/user");
 
-router.post("/userpost", (req, res) => {
-  const username = req.body.username;
-  res.send(`el usuario ingresado es = ${username}`);
-});
+//GET ALL USERS
+router.get("/", verifyToken, getUserAllController);
+
+//GET USER FOR ID
+router.get("/:id", verifyToken, getUserIdController);
+
+//CREATE USER
+router.post("/", verifyToken, postUserController);
+
+//UPDATE USER
+router.put("/:id", verifyTokenAutorizationAdminUser, putUserController);
+
+//DELETE USER
+router.delete("/:id", verifyTokenAutorizationAdminUser, deleteUserController);
 
 module.exports = router;

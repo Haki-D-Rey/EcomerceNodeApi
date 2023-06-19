@@ -2,6 +2,10 @@ const Crypto = require("crypto-js");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 
+const moment = require("moment");
+
+moment.locale("es"); // Ajusta la zona horaria según tu necesidad
+
 const getLoginUserService = async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -36,7 +40,7 @@ const getLoginUserService = async (req, res) => {
 };
 
 const postRegisterUser = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, firstname, lastname } = req.body;
 
   const existingUsername = await User.findOne({ username });
   if (existingUsername) {
@@ -57,6 +61,9 @@ const postRegisterUser = async (req, res) => {
     username: username,
     email: email,
     password: Crypto.AES.encrypt(password, process.env.PASSPHRASE).toString(),
+    isAdmin: false,
+    firstname: firstname,
+    lastname: lastname,
   });
 
   try {

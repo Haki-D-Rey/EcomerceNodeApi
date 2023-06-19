@@ -1,11 +1,11 @@
 const { getLoginUserService, postRegisterUser } = require("../services/auth");
 
-const getLoginController = async (req, res) => {
-  return await getLoginUserService(req, res);
+const getLoginController = (req, res) => {
+  return getLoginUserService(req, res);
 };
 
-const postRegisterController = async (req, res) => {
-  return await postRegisterUser(req, res);
+const postRegisterController = (req, res) => {
+  return postRegisterUser(req, res);
 };
 
 module.exports = { getLoginController, postRegisterController };
