@@ -16,10 +16,10 @@ const {
 } = require("../controllers/product");
 
 // GET PRODUCT ALL
-router.get("/", verifyToken, getProductAllController);
+router.get("/", getProductAllController);
 
 //GET PRODUCT SPECIFIC
-router.get("/:id", verifyToken, getProductController);
+router.get("/:id", getProductController);
 
 //CREATE PRODUCT
 router.post("/", verifyTokenAutorizationAdminUser, postProductController);

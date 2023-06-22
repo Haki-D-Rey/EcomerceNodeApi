@@ -40,7 +40,7 @@ const getLoginUserService = async (req, res) => {
 };
 
 const postRegisterUser = async (req, res) => {
-  const { username, email, password, firstname, lastname } = req.body;
+  const { username, email, password, firstname, lastname, isAdmin } = req.body;
 
   const existingUsername = await User.findOne({ username });
   if (existingUsername) {
@@ -61,7 +61,7 @@ const postRegisterUser = async (req, res) => {
     username: username,
     email: email,
     password: Crypto.AES.encrypt(password, process.env.PASSPHRASE).toString(),
-    isAdmin: false,
+    isAdmin: isAdmin ? isAdmin : false,
     firstname: firstname,
     lastname: lastname,
   });
