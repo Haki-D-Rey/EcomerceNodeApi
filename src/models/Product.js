@@ -40,6 +40,10 @@ const ProductSchema = new mongoose.Schema(
     launchDate: {
       type: Date,
     },
+    stock: {
+      type: Number,
+      requiered: true,
+    },
   },
   {
     timestamps: true,

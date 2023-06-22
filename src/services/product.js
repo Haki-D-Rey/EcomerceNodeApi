@@ -37,6 +37,10 @@ const postProductService = async (req, res) => {
       return res.status(400).json({ error: response.error });
     }
 
+    if (!req.body.stock) {
+      return res.status(400).json({ error: "El campo stock es Requerido" });
+    }
+
     const detailProduct = {
       ...req.body,
       codeProduct: response.value,
