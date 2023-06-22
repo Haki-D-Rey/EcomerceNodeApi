@@ -34,7 +34,7 @@ const ProductSchema = new mongoose.Schema(
       type: String,
     },
     price: {
-      type: Number,
+      type: String,
       requiered: true,
     },
     launchDate: {
@@ -43,6 +43,12 @@ const ProductSchema = new mongoose.Schema(
     stock: {
       type: Number,
       requiered: true,
+    },
+    description: {
+      type: String,
+    },
+    details: {
+      type: Array,
     },
   },
   {

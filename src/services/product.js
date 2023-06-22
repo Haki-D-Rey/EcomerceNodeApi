@@ -85,7 +85,7 @@ const putProductService = async (req, res) => {
     );
     return res.json({ message: "Usuario actualizado exitosamente" });
   } catch (error) {
-    return res.status(500).json({ error: "Error al actualizar el usuario" });
+    return res.status(500).json({ error: "Error al actualizar el Producto" });
   }
 };
 
