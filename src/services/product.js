@@ -14,7 +14,7 @@ const getProductAllServices = async (req, res) => {
       : await Product.find({});
     return res.json(productAll);
   } catch (error) {
-    return res.status(500).json({ error: "Error al obtener los usuarios" });
+    return res.status(500).json({ error: "Error al obtener los Productos" });
   }
 };
 
@@ -25,7 +25,7 @@ const getProductServices = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ error: "Error al obtener el usuario especificado" });
+      .json({ error: "Error al obtener el producto especificado" });
   }
 };
 
@@ -83,7 +83,7 @@ const putProductService = async (req, res) => {
         new: true,
       }
     );
-    return res.json({ message: "Usuario actualizado exitosamente" });
+    return res.json({ message: "Producto actualizado exitosamente" });
   } catch (error) {
     return res.status(500).json({ error: "Error al actualizar el Producto" });
   }
