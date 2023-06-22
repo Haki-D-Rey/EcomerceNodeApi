@@ -4,6 +4,14 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const { router } = require("./routes");
+const fileUploadImage = require("express-fileupload");
+
+app.use(
+  fileUploadImage({
+    useTempFiles: true,
+    tempFileDir: "./assets/",
+  })
+);
 
 dotenv.config();
 
@@ -16,8 +24,11 @@ mongoose
   .catch((err) => console.log(err));
 
 app.use(express.json());
-app.use(cors());
-
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  })
+);
 app.use("/v1", router);
 
 app.listen(process.env.PORT, () => {
