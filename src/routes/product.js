@@ -41,6 +41,6 @@ router.delete(
 );
 
 //UPDATE STOCK PRODUCT
-router.put("/stock/:id", verifyToken, putUpdateStockProductController);
+router.post("/stock", verifyToken, putUpdateStockProductController);
 
 module.exports = router;
