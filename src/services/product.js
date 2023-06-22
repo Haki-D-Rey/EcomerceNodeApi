@@ -98,10 +98,36 @@ const deleteProductService = async (req, res) => {
   }
 };
 
+const putUpdateStockProductService = async (req, res) => {
+  try {
+    const { stock } = req.body;
+    const product = await Product.findById(req.params.id);
+    if (stock > product.stock || stock <= 0) {
+      return res.status(200).json({
+        message: !stock
+          ? "No esta comprando ningun stock de producto"
+          : "No tiene suficiente stock en inventario",
+      });
+    }
+    product.stock -= stock;
+    await Product.findByIdAndUpdate(
+      req.params.id,
+      { stock: product.stock },
+      { new: true }
+    );
+    return res
+      .status(200)
+      .json({ value: product.stock, message: "Stock Actualizado" });
+  } catch (error) {
+    return res.status(500).json({ error: error });
+  }
+};
+
 module.exports = {
   getProductAllServices,
   getProductServices,
   postProductService,
   putProductService,
   deleteProductService,
+  putUpdateStockProductService,
 };

@@ -13,6 +13,7 @@ const {
   postProductController,
   putProductContoller,
   deleteProductController,
+  putUpdateStockProductController,
 } = require("../controllers/product");
 
 // GET PRODUCT ALL
@@ -38,5 +39,8 @@ router.delete(
   verifyTokenAutorizationAdminUser,
   deleteProductController
 );
+
+//UPDATE STOCK PRODUCT
+router.put("/stock/:id", verifyToken, putUpdateStockProductController);
 
 module.exports = router;
