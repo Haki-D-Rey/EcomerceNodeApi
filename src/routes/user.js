@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const User = require("../models/User");
 const {
   verifyTokenAutorizationAdminUser,
   verifyToken,
@@ -12,6 +13,8 @@ const {
   deleteUserController,
 } = require("../controllers/user");
 
+const { validateRequiredFields } = require("../helper/middleware/validateBody");
+
 //GET ALL USERS
 router.get("/", verifyToken, getUserAllController);
 
@@ -22,7 +25,12 @@ router.get("/:id", verifyToken, getUserIdController);
 router.post("/", verifyToken, postUserController);
 
 //UPDATE USER
-router.put("/:id", verifyTokenAutorizationAdminUser, putUserController);
+router.put(
+  "/:id",
+  verifyTokenAutorizationAdminUser,
+  validateRequiredFields(User),
+  putUserController
+);
 
 //DELETE USER
 router.delete("/:id", verifyTokenAutorizationAdminUser, deleteUserController);

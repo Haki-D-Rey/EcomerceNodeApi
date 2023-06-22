@@ -1,4 +1,4 @@
-const mongoose = requiere("mongoose");
+const mongoose = require("mongoose");
 
 const ProductSchema = new mongoose.Schema(
   {
@@ -7,26 +7,38 @@ const ProductSchema = new mongoose.Schema(
       requiered: true,
       unique: true,
     },
-    desc: {
+    codeProduct: {
       type: String,
       requiered: true,
-    },
-    image: {
-      type: String,
-      requiered: true,
-    },
-    categories: {
-      type: Array,
-    },
-    size: {
-      type: String,
+      unique: true,
     },
     color: {
+      type: String,
+    },
+    desc: {
+      type: String,
+    },
+    icon: {
+      type: String,
+    },
+    codeIcon: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    categories: {
+      type: String,
+      requiered: true,
+    },
+    brand: {
       type: String,
     },
     price: {
       type: Number,
       requiered: true,
+    },
+    launchDate: {
+      type: Date,
     },
   },
   {

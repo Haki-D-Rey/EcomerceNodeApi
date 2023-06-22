@@ -5,7 +5,10 @@ const Crypto = require("crypto-js");
 
 const getUserALlService = async (req, res) => {
   try {
-    const userAll = await User.find({});
+    const query = req.query.new;
+    const userAll = query
+      ? await User.find().sort({ id: -1 }).limit(5)
+      : await User.find({});
     return res.json(userAll);
   } catch (error) {
     return res.status(500).json({ error: "Error al obtener los usuarios" });
@@ -48,13 +51,12 @@ const putUserService = async (req, res) => {
       User,
       body,
       fieldNotExclude,
-      req.user
+      req.user.id
     );
     if (validate.fieldError) {
       return res.status(400).json({ error: validate.error });
     }
 
-    body.update;
     await User.findByIdAndUpdate(
       req.params.id,
       {

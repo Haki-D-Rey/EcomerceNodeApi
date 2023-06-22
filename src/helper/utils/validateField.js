@@ -1,18 +1,10 @@
-const validateFieldSchema = (model, arrayField, body) => {
-  arrayField.forEach((field) => {
-    if (model.schema.path(field).isRequired && !body[field]) {
-      return res.status(400).json({ error: `El campo ${field} es requerido` });
-    }
-  });
-};
-
 const validateFieldExistent = async (
   model,
   body,
   fieldNotExcludeValidate,
-  User
+  id
 ) => {
-  const userInfo = await model.findById(User.id);
+  const userInfo = await model.findById(id);
   const keys = Object.keys(body);
 
   for (const field of keys) {
@@ -33,4 +25,46 @@ const validateFieldExistent = async (
   return { fieldError: false, error: "" };
 };
 
-module.exports = { validateFieldSchema, validateFieldExistent };
+const generateUniqueCode = () => {
+  const timestamp = Date.now().toString();
+  const random = Math.random().toString().slice(2, 8);
+  return `${timestamp}${random}`;
+};
+
+const validateCreateProductExistent = async (Product, req) => {
+  const categoriesCode = !req.body.codeProduct
+    ? `prod-${req.body.categories}-${generateUniqueCode()}`
+    : req.body.codeProduct;
+
+  const ProductExistent = await Product.findOne({
+    codeProduct: categoriesCode,
+  });
+
+  if (ProductExistent) {
+    return { fieldError: true, error: "Este producto ya existe" };
+  }
+  return { value: categoriesCode, fieldError: false, error: "" };
+};
+
+const validateUpdateProductExistent = async (Product, req) => {
+  const codeProduct = await Product.findOne({
+    codeProduct: req.body.codeProduct,
+  });
+  const codeIcon = await Product.findOne({ codeIcon: req.body.codeIcon });
+
+  if (codeProduct && codeProduct.id !== req.params.id) {
+    return { fieldError: true, error: "El codigo del producto ya existe" };
+  }
+
+  if (codeIcon && codeIcon.id !== req.params.id) {
+    return { fieldError: true, error: "El codigo de la imagen ya existe" };
+  }
+  return { fieldError: false, error: "" };
+};
+
+module.exports = {
+  validateFieldExistent,
+  generateUniqueCode,
+  validateCreateProductExistent,
+  validateUpdateProductExistent,
+};
